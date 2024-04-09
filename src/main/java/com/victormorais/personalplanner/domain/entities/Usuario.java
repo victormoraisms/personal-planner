@@ -30,6 +30,9 @@ public class Usuario {
     @Column(nullable = false)
     private String senha;
 
+    @Column(nullable = false)
+    private int tipo;
+
     @Column
     private String dicaSenha;
 }
