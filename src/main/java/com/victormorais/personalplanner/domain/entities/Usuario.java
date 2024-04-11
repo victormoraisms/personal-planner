@@ -21,17 +21,14 @@ public class Usuario {
     @Column(columnDefinition = "BINARY(16)")
     private UUID idUsuario;
 
-    @Column(nullable = false)
-    private String nome;
-
     @Column(nullable = false, unique = true)
-    private String login;
+    private String username;
 
     @Column(nullable = false)
     private String senha;
 
     @Column(nullable = false)
-    private int tipo;
+    private boolean isAdmin;
 
     @Column
     private String dicaSenha;
