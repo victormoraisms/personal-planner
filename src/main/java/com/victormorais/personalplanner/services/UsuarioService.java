@@ -42,12 +42,12 @@ public class UsuarioService {
 
     }
 
-    public boolean login(String username, String senha) {
+    public String login(String username, String senha) {
         Usuario usuario = usuarioRepository.findByUsername(username);
         if (usuario != null && usuario.getSenha().equals(senha)) {
-            return true; // Login bem-sucedido
+            return "Login bem-sucedido" +  " \n Id do usuário:" + usuario.getIdUsuario(); // Login bem-sucedido
         }
-        return false; // Login falhou
+        return null; // Login falhou
     }
 
     public String getDicaSenha(String username){

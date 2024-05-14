@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Entity
@@ -66,4 +67,18 @@ public class Evento {
     @Column(nullable = false)
     @UpdateTimestamp
     private LocalDateTime dhAtualizacao;
+
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
+        return "Evento de " + usuario.getUsername() + ": " +
+                 nome + '\'' +
+                ", tipo: '" + tipo + '\'' +
+                ", dataEvento: " + dataEvento.format(formatter) + '\'' +
+                hrInicio != null ? "hora de inicio do evento: " + hrInicio.toString() + '\'' +
+                "hora de fim do evento: " + hrFim.toString() + '\''  : "" +
+                ", descricao: " + descricao + '\'' +
+                ", notas: " + notas + '\'';
+    }
 }

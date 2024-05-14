@@ -1,8 +1,10 @@
 package com.victormorais.personalplanner.controller;
 
 import com.victormorais.personalplanner.domain.entities.Objetivo;
+import com.victormorais.personalplanner.domain.model.ObjetivoAttDTO;
 import com.victormorais.personalplanner.domain.model.ObjetivoDTO;
 import com.victormorais.personalplanner.services.ObjetivoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,7 @@ public class ObjetivoController {
     private ObjetivoService objetivoService;
 
     @PostMapping
-    public ResponseEntity<Objetivo> criarObjetivo(@RequestBody ObjetivoDTO objetivoDTO,
+    public ResponseEntity<Objetivo> criarObjetivo(@RequestBody @Valid ObjetivoDTO objetivoDTO,
                                                   @RequestHeader("UsuarioLogado") String idUsuarioLogado) {
 
         Objetivo objetivoCriado = objetivoService.criarObjetivo(objetivoDTO, idUsuarioLogado);
@@ -27,7 +29,7 @@ public class ObjetivoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Objetivo> atualizarObjetivo(@PathVariable UUID id, @RequestBody ObjetivoDTO objetivoDTO) {
+    public ResponseEntity<Objetivo> atualizarObjetivo(@PathVariable UUID id, @RequestBody ObjetivoAttDTO objetivoDTO) {
         Objetivo objetivoAtualizado = objetivoService.atualizarObjetivo(id, objetivoDTO);
         if (objetivoAtualizado != null) {
             return ResponseEntity.ok(objetivoAtualizado);
@@ -37,15 +39,15 @@ public class ObjetivoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Objetivo>> obterObjetivos() {
-        List<Objetivo> objetivos = objetivoService.obterObjetivos();
+    public ResponseEntity<List<Objetivo>> obterObjetivos(@RequestHeader("UsuarioLogado") UUID idUsuarioLogado) {
+        List<Objetivo> objetivos = objetivoService.obterObjetivos(idUsuarioLogado);
         return ResponseEntity.ok(objetivos);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deletarObjetivo(@PathVariable UUID id) {
-        objetivoService.deletarObjetivo(id);
-        return ResponseEntity.noContent().build();
+        String msg = objetivoService.deletarObjetivo(id);
+        return ResponseEntity.ok(msg);
     }
 
 }

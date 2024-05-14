@@ -3,13 +3,16 @@ package com.victormorais.personalplanner.services;
 import com.victormorais.personalplanner.domain.entities.Objetivo;
 import com.victormorais.personalplanner.domain.entities.Status;
 import com.victormorais.personalplanner.domain.entities.Usuario;
+import com.victormorais.personalplanner.domain.model.ObjetivoAttDTO;
 import com.victormorais.personalplanner.domain.model.ObjetivoDTO;
 import com.victormorais.personalplanner.domain.repository.ObjetivoRepository;
 import com.victormorais.personalplanner.domain.repository.UsuarioRepository;
+import org.springframework.beans.InvalidPropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,7 +44,7 @@ public class ObjetivoService {
 
     }
 
-    public Objetivo atualizarObjetivo(UUID idObjetivo, ObjetivoDTO objetivoDTO) {
+    public Objetivo atualizarObjetivo(UUID idObjetivo, ObjetivoAttDTO objetivoDTO) {
 
         Objetivo objetivoExistente = objetivoRepository.findById(idObjetivo).orElse(null);
         if (objetivoExistente == null) {
@@ -57,7 +60,20 @@ public class ObjetivoService {
         return objetivoRepository.save(objetivoExistente);
     }
 
-    public List<Objetivo> obterObjetivos() { return objetivoRepository.findAll(); }
+    public List<Objetivo> obterObjetivos(UUID idUsuarioLogado) {
+
+        List<Objetivo> objetivos;
+
+        Optional<Usuario> usuario = usuarioRepository.findById(idUsuarioLogado);
+
+        if (usuario.isPresent() ) {
+            objetivos = objetivoRepository.findAllByUsuario(usuario.get());
+        }else{
+            throw new InvalidPropertyException(EventoService.class, "usuario", "Usuário não encontrado");
+        }
+
+        return objetivos;
+    }
 
     public String deletarObjetivo(UUID idObjetivo) {
         Optional<Objetivo> objetivo = objetivoRepository.findById(idObjetivo);
