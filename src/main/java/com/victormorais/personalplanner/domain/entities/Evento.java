@@ -15,6 +15,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "EVENTO")
 public class Evento {
 
     @Id

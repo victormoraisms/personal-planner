@@ -23,11 +23,11 @@ public class UsuarioController {
     public ResponseEntity criarUsuario(@RequestBody UsuarioDTO usuarioDTO,
                                        @RequestHeader("UsuarioLogado") String idUsuarioLogado) {
 
-        String errorMsg = validaUsuarioAdmin(idUsuarioLogado);
+        /*String errorMsg = validaUsuarioAdmin(idUsuarioLogado);
 
         if(errorMsg!= null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMsg);
-        }
+        }*/
 
         // Agora, chama o serviço para criar o usuário
         Usuario user = usuarioService.criarUsuario(usuarioDTO);
@@ -38,11 +38,11 @@ public class UsuarioController {
     @GetMapping
     public ResponseEntity listarUsuarios(@RequestHeader("UsuarioLogado") String idUsuarioLogado) {
 
-        String errorMsg = validaUsuarioAdmin(idUsuarioLogado);
+        /*String errorMsg = validaUsuarioAdmin(idUsuarioLogado);
 
         if(errorMsg!= null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMsg);
-        }
+        }*/
 
         // Agora, chama o serviço para listar os usuários
         List<Usuario> users = usuarioService.listarUsuarios();
@@ -52,7 +52,7 @@ public class UsuarioController {
 
     @DeleteMapping("/{idUsuario}")
     public ResponseEntity deletarUsuario(@RequestHeader("UsuarioLogado") String idUsuarioLogado,
-                                         @RequestParam("idUsuario") String idUsuario) {
+                                         @PathVariable("idUsuario") String idUsuario) {
 
         String errorMsg = validaUsuarioAdmin(idUsuarioLogado);
 
@@ -67,7 +67,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{username}/dica")
-    public ResponseEntity obterDicaSenha(@RequestParam("username") String username) {
+    public ResponseEntity obterDicaSenha(@PathVariable("username") String username) {
 
         // Agora, chama o serviço para obter a dica de senha do usuário
         String dica = usuarioService.getDicaSenha(username);
