@@ -1,6 +1,7 @@
 package com.victormorais.personalplanner.services;
 
 import com.victormorais.personalplanner.domain.entities.Evento;
+import com.victormorais.personalplanner.domain.entities.Status;
 import com.victormorais.personalplanner.domain.repository.EventoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,7 +17,7 @@ public class ConsultaPeriodica {
     @Autowired
     EventoRepository eventoRepository;
 
-    @Scheduled(fixedRate = 60000) // Executa a cada minuto
+    @Scheduled(fixedRate = 30000) // Executa a cada minuto
     public void consultarEventos() {
 
         List<Evento> eventos = eventoRepository.findAll();
@@ -28,10 +29,16 @@ public class ConsultaPeriodica {
             now = now.withSecond(0).withNano(0); // Configura os segundos e nanossegundos para 0
 
             for(Evento evento : eventos){
-                if(evento.getHrInicio() == null && evento.getDataEvento().toLocalDate().isEqual(currentDate)){
-                    System.out.println(evento);
-                }else if(evento.getHrInicio() != null && evento.getHrInicio().withSecond(0).withNano(0).equals(now)){
-                    System.out.println(evento);
+                if (evento.getStatus().equals(Status.ASF)){
+                    if(evento.getHrInicio() == null && evento.getDataEvento().toLocalDate().isEqual(currentDate)){
+                        System.out.println(evento);
+                        evento.setStatus(Status.EP);
+                        eventoRepository.save(evento);
+                    }else if(evento.getHrInicio() != null && evento.getHrInicio().withSecond(0).withNano(0).equals(now)){
+                        System.out.println(evento);
+                        evento.setStatus(Status.EP);
+                        eventoRepository.save(evento);
+                    }
                 }
             }
         }

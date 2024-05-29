@@ -14,7 +14,7 @@ public interface EventoRepository extends JpaRepository<Evento, UUID> {
 
     List<Evento> findAllByUsuario(Usuario usuario);
 
-    @Query("SELECT e FROM Evento e WHERE e.hrInicio <= :x AND e.hrFim > :y")
-    List<Evento> encontrarEventosPorHora(LocalDateTime x, LocalDateTime y);
+    @Query("SELECT e FROM Evento e WHERE e.dataEvento = :y AND e.hrInicio <= :x AND e.hrFim > :x")
+    List<Evento> encontrarEventosPorDataEHora(LocalDateTime x, LocalDateTime y);
 
 }

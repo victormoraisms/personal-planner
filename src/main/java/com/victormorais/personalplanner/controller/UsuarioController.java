@@ -38,11 +38,11 @@ public class UsuarioController {
     @GetMapping
     public ResponseEntity listarUsuarios(@RequestHeader("UsuarioLogado") String idUsuarioLogado) {
 
-        /*String errorMsg = validaUsuarioAdmin(idUsuarioLogado);
+        String errorMsg = validaUsuarioAdmin(idUsuarioLogado);
 
         if(errorMsg!= null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMsg);
-        }*/
+        }
 
         // Agora, chama o serviço para listar os usuários
         List<Usuario> users = usuarioService.listarUsuarios();

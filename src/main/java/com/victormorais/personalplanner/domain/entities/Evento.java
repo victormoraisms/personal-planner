@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,6 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "EVENTO")
+@EntityListeners(AuditingEntityListener.class)
 public class Evento {
 
     @Id
@@ -63,6 +66,7 @@ public class Evento {
 
     @Column(nullable = false)
     @CreatedDate
+    @CreationTimestamp
     private LocalDateTime dhCriacao;
 
     @Column(nullable = false)
@@ -73,13 +77,20 @@ public class Evento {
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
-        return "Evento de " + usuario.getUsername() + ": " +
-                 nome + '\'' +
-                ", tipo: '" + tipo + '\'' +
-                ", dataEvento: " + dataEvento.format(formatter) + '\'' +
-                hrInicio != null ? "hora de inicio do evento: " + hrInicio.toString() + '\'' +
-                "hora de fim do evento: " + hrFim.toString() + '\''  : "" +
-                ", descricao: " + descricao + '\'' +
-                ", notas: " + notas + '\'';
+        StringBuilder sb = new StringBuilder();
+        sb.append("Evento de ").append(usuario.getUsername()).append(": \n");
+        sb.append("Tipo:  ").append(tipo).append("\n");
+        sb.append("Data Evento: ").append(dataEvento.format(formatter)).append("\n");
+
+        // Validar os valores e adicionar texto ao StringBuilder
+        if (hrInicio != null && hrFim != null ) {
+            sb.append("Hora de inicio do evento:  ").append(hrInicio.format(formatter)).append("\n");
+            sb.append("Hora de fim do evento: ").append(hrFim.format(formatter)).append("\n");
+        }
+
+        sb.append("Descricao: ").append(descricao).append("\n");
+        sb.append("Notas: ").append(notas).append("\n");
+
+        return sb.toString();
     }
 }

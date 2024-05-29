@@ -57,7 +57,7 @@ public class EventoService {
         evento.setTipo(eventoDTO.getTipo());
         evento.setDataEvento(eventoDTO.getDataEvento());
         if(eventoDTO.getHrInicio() != null && eventoDTO.getHrFim() != null){
-            List<Evento> eventosPorHora = eventoRepository.encontrarEventosPorHora(eventoDTO.getHrInicio(), eventoDTO.getHrFim());
+            List<Evento> eventosPorHora = eventoRepository.encontrarEventosPorDataEHora(eventoDTO.getHrInicio(), eventoDTO.getDataEvento());
 
             if(!eventosPorHora.isEmpty()){
                 LocalDateTime hrFimEvento = eventoDTO.getHrFim();
@@ -93,7 +93,7 @@ public class EventoService {
         if(eventoDTO.getTipo() != null) eventoExistente.setTipo(eventoDTO.getTipo());
         if(eventoDTO.getDataEvento() != null) eventoExistente.setDataEvento(eventoDTO.getDataEvento());
         if(eventoDTO.getHrInicio() != null && eventoDTO.getHrFim() != null){
-            List<Evento> eventosPorHora = eventoRepository.encontrarEventosPorHora(eventoDTO.getHrInicio(), eventoDTO.getHrFim());
+            List<Evento> eventosPorHora = eventoRepository.encontrarEventosPorDataEHora(eventoDTO.getHrInicio(), eventoDTO.getDataEvento());
 
             if(!eventosPorHora.isEmpty()){
                 LocalDateTime hrFimEvento = eventoDTO.getHrFim();
@@ -114,7 +114,7 @@ public class EventoService {
         if(eventoDTO.getDescricao() != null) eventoExistente.setDescricao(eventoDTO.getDescricao());
         if(eventoDTO.getPrioridade() != null) eventoExistente.setPrioridade(eventoDTO.getPrioridade());
         if(eventoDTO.getNotas() != null) eventoExistente.setNotas(eventoDTO.getNotas());
-        eventoExistente.setStatus(Status.valueOf(eventoDTO.getStatus()));
+        if(eventoDTO.getStatus() != null) eventoExistente.setStatus(Status.valueOf(eventoDTO.getStatus()));
 
         return eventoRepository.save(eventoExistente);
     }
@@ -146,12 +146,15 @@ public class EventoService {
             throw new InvalidPropertyException(EventoService.class, "usuario", "Usuário não encontrado");
         }
 
-        Optional<Objetivo> objetivo = objetivoRepository.findById(eventoDTO.getIdObjetivo());
+        if(eventoDTO.getIdObjetivo() != null){
+            Optional<Objetivo> objetivo = objetivoRepository.findById(eventoDTO.getIdObjetivo());
 
-        if (objetivo.isPresent() ) {
-            evento.setObjetivo(objetivo.get());
+            if (objetivo.isPresent() ) {
+                evento.setObjetivo(objetivo.get());
+            }
         }
 
+        if (eventoDTO.getStatus() != null) evento.setStatus(Status.valueOf(eventoDTO.getStatus()));
         evento.setNome(eventoDTO.getNome());
         evento.setTipo(eventoDTO.getTipo());
         evento.setDataEvento(eventoDTO.getDataEvento());

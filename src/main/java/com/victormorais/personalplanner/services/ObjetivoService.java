@@ -34,11 +34,10 @@ public class ObjetivoService {
         objetivo.setUsuario(usuario.get());
         objetivo.setNome(objetivoDTO.getNome());
         if(objetivoDTO.getDescricao() != null) objetivo.setDescricao(objetivoDTO.getDescricao());
-        if(objetivo.getDataLimite() != null) objetivo.setDataLimite(objetivoDTO.getDataLimite());
+        if(objetivoDTO.getDataLimite() != null) objetivo.setDataLimite(objetivoDTO.getDataLimite());
 
-        Integer prioridade = objetivoDTO.getPrioridade() != null ? objetivoDTO.getPrioridade() : 1;
-        objetivo.setPrioridade(prioridade);
-        objetivo.setStatus(Status.ASF);
+        objetivo.setPrioridade(objetivoDTO.getPrioridade() != null ? objetivoDTO.getPrioridade() : 1);
+        objetivo.setStatus(objetivoDTO.getStatus() != null ? objetivoDTO.getStatus() : Status.ASF);
 
         return objetivoRepository.save(objetivo);
 
